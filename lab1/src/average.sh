@@ -1,8 +1,11 @@
 #!/bin/bash
-
-count = 0
-for param in "$@"
+count=0
+number=0
+while read arg
 do
-count = $count+$param
+	count=$(($count+1))
+	number=$(($number+$arg))
 done
-echo $# $($count/($#))
+dev=$(echo "$number / $count" | bc)
+echo $dev
+echo $count
