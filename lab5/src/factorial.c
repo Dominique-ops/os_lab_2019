@@ -14,7 +14,7 @@
 pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 
 struct Fac {
-    int value;
+    int* value;
     int start;
     int end;
 };
@@ -25,10 +25,10 @@ void* factorial(void *args){
     //printf("%d\n",arg->start);
     //printf("%d\n",arg->end);
     for (int i =arg->start+1;i<=arg->end;i++){
-        arg->value=arg->value*i;
+        *(arg->value)=*(arg->value)*i;
     }
     pthread_mutex_unlock( &mutex1 );
-    return (void *) (long long int) arg->value;
+    //return (void *) (long long int) arg->value;
 }
 
 void *Threadfac(void *args) {
@@ -110,28 +110,24 @@ int main(int argc, char **argv) {
  struct Fac arg[pnum];
  unsigned int step = k/pnum;
  int z = ((k%pnum)==0)?0:(k%pnum);
+ int r = 1;
   for (int i = 0; i < pnum; i++) {
-    arg[i].value=1;
+    arg[i].value=&r;
     arg[i].start = step*i;
     arg[i].end=arg[i].start+step;
     if (i == pnum - 1) {
             arg[i].end += z;
             }
-    //printf("%d\n",arg.start);
-    //printf("%d\n",arg.end);
         if (pthread_create(&threads[i], NULL, factorial, (void *)(arg+i))) {
             printf("Error: pthread_create failed!\n");
             return 1;
         }
   }
-int total_sum = 1;
   for (int i = 0; i < pnum; i++) {
-    int sum = 0;
-    pthread_join(threads[i], (void**)&sum);
-    total_sum *=sum;
+    pthread_join(threads[i], NULL);
   }
 
-printf("%d",total_sum);
+printf("%d",r);
 
   return 0;
 }
