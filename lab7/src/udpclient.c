@@ -9,18 +9,19 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define SERV_PORT 20001
+//#define SERV_PORT 20001
 #define BUFSIZE 1024
 #define SADDR struct sockaddr
 #define SLEN sizeof(struct sockaddr_in)
 
 int main(int argc, char **argv) {
   int sockfd, n;
+  int SERV_PORT = atoi(argv[2]);
   char sendline[BUFSIZE], recvline[BUFSIZE + 1];
   struct sockaddr_in servaddr;
   struct sockaddr_in cliaddr;
 
-  if (argc != 2) {
+  if (argc != 3) {
     printf("usage: client <IPaddress of server>\n");
     exit(1);
   }

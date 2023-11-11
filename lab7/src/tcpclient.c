@@ -14,12 +14,12 @@
 int main(int argc, char *argv[]) {
   int fd;
   int nread;
-  char buf[BUFSIZE];
+  char buf[100];
   struct sockaddr_in servaddr;
-  if (argc < 3) {
+  /*if (argc < 10) {
     printf("Too few arguments \n");
     exit(1);
-  }
+  }*/
 
   if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     perror("socket creating");
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
   }
 
   write(1, "Input message to send\n", 22);
-  while ((nread = read(0, buf, BUFSIZE)) > 0) {
+  while ((nread = read(0, buf, 100)) > 0) {
     if (write(fd, buf, nread) < 0) {
       perror("write");
       exit(1);
